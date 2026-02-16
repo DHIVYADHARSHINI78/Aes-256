@@ -31,41 +31,7 @@ class PatientController {
         }
     }
 
-    // public function create() {
-    //     $data = $GLOBALS['request_data'];
-    //     $userId = $GLOBALS['user']['user_id'];
-    //     $required_fields = ['name', 'age', 'gender', 'contact', 'address'];
-
-    //     foreach ($required_fields as $field) {
-    //         if (empty($data[$field])) {
-    //             Response::json(['error' => ucfirst($field) . " is required"], 400);
-    //             return;
-    //         }
-    //     }
-
-    //     if (!is_numeric($data['age']) || $data['age'] <= 0) {
-    //         Response::json(['error' => 'Age must be a number greater than 0'], 400);
-    //         return;
-    //     }
-
-    //     // Normalize, encrypt, and hash the contact (phone)
-    //     $normalizedContact = preg_replace('/\D/', '', $data['contact']); // Keep only digits
-    //     if (strlen($normalizedContact) !== 10) {  // Assuming 10-digit phone
-    //         Response::json(['error' => 'Contact must be exactly 10 digits'], 400);
-    //         return;
-    //     }
-    //     $contactEncrypted = AES::encrypt($normalizedContact);
-    //     $contactHash = AES::generateHash($normalizedContact);
-
-    //     $patientModel = new Patient();
-    //     $success = $patientModel->create($data['name'], $data['age'], $data['gender'], $contactEncrypted, $contactHash, $data['address'], $userId);
-
-    //     if ($success) {
-    //         Response::json(['message' => 'Patient added successfully'], 201);
-    //     } else {
-    //         Response::json(['error' => 'Failed to add patient'], 500);
-    //     }
-    // }
+   
     public function create() {
     $data = $GLOBALS['request_data'];
     $userId = $GLOBALS['user']['user_id'];

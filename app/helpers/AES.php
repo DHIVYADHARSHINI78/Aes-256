@@ -3,7 +3,14 @@ class AES {
     private static $cipher = 'aes-256-cbc';
     private static $keyLength = 32; // 256 bits
 
-    // Encrypt data using AES-256-CBC
+  private static function getKey($envVar) {
+        if (!defined($envVar)) {
+            throw new Exception("Environment variable $envVar not set");
+        }
+        $key = constant($envVar);
+      
+        return substr(hash('sha256', $key, true), 0, self::$keyLength);
+    }
     public static function encrypt($plainText) {
         $key = self::getKey('AES_SECRET');
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(self::$cipher)); // Unique IV per encryption
@@ -35,13 +42,7 @@ class AES {
         return hash_hmac('sha256', strtolower(trim($plainText)), $key);
     }
 
-    // Helper to get key from .env (ensure it's defined)
-    private static function getKey($envVar) {
-        if (!defined($envVar)) {
-            throw new Exception("Environment variable $envVar not set");
-        }
-        $key = constant($envVar);
-        // Ensure key is exactly 32 bytes (pad or truncate if needed)
-        return substr(hash('sha256', $key, true), 0, self::$keyLength);
-    }
+
+
+  
 }
