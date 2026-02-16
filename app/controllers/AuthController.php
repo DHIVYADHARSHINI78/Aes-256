@@ -51,15 +51,14 @@ class AuthController {
             'rt_sig'  => hash('sha256', $rtSignature)
         ]);
 
-        // Capture User Agent Hash (IP logic removed)
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-        $userAgentHash = hash('sha256', $userAgent);
+        // Capture User Agent Hash 
+     
 
-        // Store Token in DB (Removed IP parameter and extra calls)
+       $userModel->storeRefreshToken($user['id'], $refreshToken);
      
 
         setcookie("refreshToken", $refreshToken, [
-            'expires' => time() + (86400 * 30),
+            'expires' => time() + (int)REFRESH_TOKEN_EXP,
             'path' => "/",
             'httponly' => true,
             'secure' => false,
@@ -88,14 +87,11 @@ class AuthController {
             return;
         }
 
-        if ($userData['exp'] > time()) {
-            Response::json(["error" => "Access token is still valid"], 400);
-            return;
-        }
+       
 
         $refreshToken = $_COOKIE['refreshToken'] ?? null;
         if (!$refreshToken) {
-            Response::json(['error' => 'Session expired'], 401);
+            Response::json(['error' => 'Session expired or Loginin again'], 401);
             return;
         }
 
@@ -127,7 +123,7 @@ class AuthController {
         $userModel->storeRefreshToken($user['id'], $newRefreshToken, $userAgentHash);
 
         setcookie("refreshToken", $newRefreshToken, [
-            'expires' => time() + (86400 * 30),
+            'expires' => time() + (int)REFRESH_TOKEN_EXP,
             'path' => "/",
             'httponly' => true,
             'secure' => false,

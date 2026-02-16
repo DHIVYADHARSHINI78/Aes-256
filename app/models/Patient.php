@@ -26,6 +26,7 @@ class Patient {
             ':address' => $address,
             ':userId' => $userId
         ]);
+        
     }
 
     public function update($id, $name, $age, $gender, $contactEncrypted, $contactHash, $address, $userId) {
